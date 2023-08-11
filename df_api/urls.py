@@ -18,8 +18,10 @@ urlpatterns = [
 
 urlpatterns += [
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    path("", SpectacularRedocView.as_view(url_name="df_api:schema"), name="redoc"),
     path(
-        "swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"
+        "swagger/",
+        SpectacularSwaggerView.as_view(url_name="df_api:schema"),
+        name="swagger-ui",
     ),
 ]

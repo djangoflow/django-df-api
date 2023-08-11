@@ -17,6 +17,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "df_api",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
     "tests.test_app.apps.TestAppConfig",
 ]
 
@@ -75,3 +77,21 @@ LOGGING = {
 STATIC_URL = "/static/"
 
 ALLOWED_HOSTS = ["*"]
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "df_api.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "DjangoFlow API",
+    "DESCRIPTION": "DjangoFlow API",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+    "SCHEMA_PATH_PREFIX": "/api/v1",
+    "COMPONENT_SPLIT_REQUEST": True,
+    "COMPONENT_NO_READ_ONLY_REQUIRED": True,
+    "ENUM_ADD_EXPLICIT_BLANK_NULL_CHOICE": False,
+}
