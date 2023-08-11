@@ -1,8 +1,9 @@
 from typing import Any, Dict
 
 from django.utils.translation import gettext_lazy as _
+from rest_framework.schemas.openapi import AutoSchema as DefaultAutoSchema
 
-from df_api.serializers import DefaultAutoSchema, ErrorResponseSerializer
+from df_api.serializers import ErrorResponseSerializer
 
 
 class AutoSchema(DefaultAutoSchema):
