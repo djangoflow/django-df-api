@@ -6,5 +6,5 @@ from rest_framework.settings import APISettings
 DEFAULTS: Dict[str, Any] = {}
 
 module_settings = APISettings(
-    getattr(settings, "DJANGOFLOW", {}).get("DF_API"), DEFAULTS
+    getattr(settings, "DJANGOFLOW", {}).get("DF_API_DRF"), DEFAULTS
 )

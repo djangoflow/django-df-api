@@ -16,7 +16,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "df_api",
+    "df_api_drf",
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "tests.test_app.apps.TestAppConfig",
@@ -79,7 +79,7 @@ STATIC_URL = "/static/"
 ALLOWED_HOSTS = ["*"]
 
 REST_FRAMEWORK = {
-    "DEFAULT_SCHEMA_CLASS": "df_api.openapi.AutoSchema",
+    "DEFAULT_SCHEMA_CLASS": "df_api_drf.openapi.AutoSchema",
 }
 
 SPECTACULAR_SETTINGS = {

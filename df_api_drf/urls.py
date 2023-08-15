@@ -7,7 +7,7 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
-app_name = "df_api"
+app_name = "df_api_drf"
 
 
 urlpatterns = [
@@ -18,10 +18,10 @@ urlpatterns = [
 
 urlpatterns += [
     path("schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("", SpectacularRedocView.as_view(url_name="df_api:schema"), name="redoc"),
+    path("", SpectacularRedocView.as_view(url_name="df_api_drf:schema"), name="redoc"),
     path(
         "swagger/",
-        SpectacularSwaggerView.as_view(url_name="df_api:schema"),
+        SpectacularSwaggerView.as_view(url_name="df_api_drf:schema"),
         name="swagger-ui",
     ),
 ]
