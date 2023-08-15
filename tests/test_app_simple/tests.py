@@ -6,10 +6,11 @@ from rest_framework.test import APITestCase
 class DfApiTests(APITestCase):
     """Tests for DF API."""
 
-    def test_blank_view_returns_204(self) -> None:
-        url = reverse("df_api_drf:blank")
+    def test_blank_view_returns_200(self) -> None:
+        url = reverse("df_api_drf:v1:test_app_simple:blank")
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["message"], "blank-simple")
 
     def test_schema_returns_valid_openapi_spec(self) -> None:
         url = reverse("df_api_drf:schema")

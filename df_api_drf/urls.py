@@ -1,3 +1,6 @@
+from collections import defaultdict
+from typing import Dict
+
 from django.apps import apps
 from django.conf.urls import include
 from django.urls import path
@@ -9,12 +12,24 @@ from drf_spectacular.views import (
 
 app_name = "df_api_drf"
 
+urlpatterns = []
 
-urlpatterns = [
-    path(f"{app.api_path}", include(f"{app.name}.drf.urls"))
-    for app in apps.get_app_configs()
-    if hasattr(app, "api_path")
-]
+namespaces: Dict[str, Dict[str, str]] = defaultdict(dict)
+
+for app in apps.get_app_configs():
+    if hasattr(app, "api_path"):
+        for namespace, urls in getattr(
+            app, "api_drf_namespaces", {"v1": f"{app.name}.drf.urls"}
+        ).items():
+            namespaces[namespace][app.api_path] = urls
+
+
+for namespace, app_urls in namespaces.items():
+    namespace_patterns = []
+    for api_path, urls in app_urls.items():
+        namespace_patterns += [path(api_path, include((urls, api_path.strip("/"))))]
+    urlpatterns += [path(f"{namespace}/", include((namespace_patterns, namespace)))]
+
 
 urlpatterns += [
     path("schema/", SpectacularAPIView.as_view(), name="schema"),

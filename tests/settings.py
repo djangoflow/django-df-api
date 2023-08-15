@@ -19,7 +19,8 @@ INSTALLED_APPS = [
     "df_api_drf",
     "drf_spectacular",
     "drf_spectacular_sidecar",
-    "tests.test_app.apps.TestAppConfig",
+    "tests.test_app_simple.apps.TestAppConfig",
+    "tests.test_app_namespaces.apps.TestAppConfig",
 ]
 
 MIDDLEWARE = [
