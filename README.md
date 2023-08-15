@@ -1,4 +1,4 @@
-# Django DF API
+# Django DF API DRF
 
 Module for automatic including Djangoflow apps API to your project.
 
@@ -7,7 +7,7 @@ Module for automatic including Djangoflow apps API to your project.
 - Install the package
 
 ```
-pip install django-df-api
+pip install django-df-api-drf
 ```
 
 - Add the package to your INSTALLED_APPS
@@ -15,7 +15,7 @@ pip install django-df-api
 ```
 INSTALLED_APPS = [
     ...
-    'df_api',
+    'df_api_drf',
     ...
 ]
 ```
@@ -25,7 +25,7 @@ INSTALLED_APPS = [
 ```
 urlpatterns = [
     ...
-    path("api/v1/", include("df_api.urls")),
+    path("api/v1/", include("df_api_drf.urls")),
     ...
 ]
 ```

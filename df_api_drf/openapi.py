@@ -3,7 +3,7 @@ from typing import Any, Dict
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.openapi import AutoSchema as DefaultAutoSchema
 
-from df_api.serializers import ErrorResponseSerializer
+from df_api_drf.serializers import ErrorResponseSerializer
 
 
 class AutoSchema(DefaultAutoSchema):
