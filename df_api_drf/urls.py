@@ -17,11 +17,12 @@ urlpatterns = []
 namespaces: Dict[str, Dict[str, str]] = defaultdict(dict)
 
 for app in apps.get_app_configs():
-    if hasattr(app, "api_path"):
-        for namespace, urls in getattr(
-            app, "api_drf_namespaces", {"v1": f"{app.name}.drf.urls"}
-        ).items():
-            namespaces[namespace][app.api_path] = urls
+    if df_meta := getattr(app, "DFMeta", None):
+        if api_path := df_meta.api_path:
+            for namespace, urls in getattr(
+                df_meta, "api_drf_namespaces", {"v1": f"{app.name}.drf.urls"}
+            ).items():
+                namespaces[namespace][api_path] = urls
 
 
 for namespace, app_urls in namespaces.items():
