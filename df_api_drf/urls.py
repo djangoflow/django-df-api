@@ -2,6 +2,7 @@ from collections import defaultdict
 from typing import Dict
 
 from django.apps import apps
+from django.conf import settings
 from django.conf.urls import include
 from django.urls import path
 from drf_spectacular.views import (
@@ -26,18 +27,37 @@ for app in apps.get_app_configs():
 
 
 for namespace, app_urls in namespaces.items():
-    namespace_patterns = []
+    namespace_patterns = [
+        path(
+            "schema/",
+            SpectacularAPIView.as_view(
+                api_version=namespace,
+                custom_settings={
+                    "SCHEMA_PATH_PREFIX": settings.SPECTACULAR_SETTINGS.get(
+                        "SCHEMA_PATH_PREFIX", "/api/"
+                    )
+                    + namespace
+                    + "/"
+                },
+            ),
+            name="schema",
+        ),
+        path(
+            "",
+            SpectacularRedocView.as_view(url_name=f"df_api_drf:{namespace}:schema"),
+            name="redoc",
+        ),
+        path(
+            "swagger/",
+            SpectacularSwaggerView.as_view(url_name=f"df_api_drf:{namespace}:schema"),
+            name="swagger-ui",
+        ),
+    ]
     for api_path, urls in app_urls.items():
         namespace_patterns += [path(api_path, include((urls, api_path.strip("/"))))]
-    urlpatterns += [path(f"{namespace}/", include((namespace_patterns, namespace)))]
-
-
-urlpatterns += [
-    path("schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("", SpectacularRedocView.as_view(url_name="df_api_drf:schema"), name="redoc"),
-    path(
-        "swagger/",
-        SpectacularSwaggerView.as_view(url_name="df_api_drf:schema"),
-        name="swagger-ui",
-    ),
-]
+    urlpatterns += [
+        path(
+            f"{namespace}/",
+            include((namespace_patterns, namespace), namespace=namespace),
+        )
+    ]

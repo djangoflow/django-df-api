@@ -1,4 +1,7 @@
-from df_api_drf.defaults import REST_FRAMEWORK
+from df_api_drf.defaults import (  # noqa: F401
+    REST_FRAMEWORK,
+    SPECTACULAR_SETTINGS,
+)
 
 DEBUG = True
 
