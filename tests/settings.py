@@ -1,4 +1,5 @@
-from df_api_drf.defaults import (  # noqa: F401
+from df_api_drf.defaults import (
+    DF_API_DRF_INSTALLED_APPS,
     REST_FRAMEWORK,
     SPECTACULAR_SETTINGS,
 )
@@ -20,10 +21,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
-    "df_api_drf",
-    "drf_spectacular",
-    "drf_spectacular_sidecar",
+    *DF_API_DRF_INSTALLED_APPS,
     "tests.test_app_simple.apps.TestAppConfig",
     "tests.test_app_namespaces.apps.TestAppConfig",
 ]
@@ -84,5 +82,8 @@ STATIC_URL = "/static/"
 
 ALLOWED_HOSTS = ["*"]
 
+REST_FRAMEWORK = dict(REST_FRAMEWORK)
 REST_FRAMEWORK.pop("DEFAULT_AUTHENTICATION_CLASSES")
 REST_FRAMEWORK.pop("DEFAULT_PERMISSION_CLASSES")
+
+SPECTACULAR_SETTINGS = dict(SPECTACULAR_SETTINGS)

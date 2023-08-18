@@ -31,3 +31,10 @@ SPECTACULAR_SETTINGS = {
     "COMPONENT_NO_READ_ONLY_REQUIRED": True,
     "ENUM_ADD_EXPLICIT_BLANK_NULL_CHOICE": False,
 }
+
+DF_API_DRF_INSTALLED_APPS = [
+    "rest_framework",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",
+    "df_api_drf",
+]
