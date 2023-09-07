@@ -44,3 +44,8 @@ class DfApiTests(APITestCase):
         self.assertEqual(
             blank_path["get"]["operationId"], "test_app_namespaces_blank_retrieve"
         )
+
+    def test_extra_data_error_response_contains_extra_data(self) -> None:
+        url = reverse("df_api_drf:v1:test_app_simple:extra-data-error")
+        response = self.client.get(url)
+        self.assertEqual(response.data["errors"][0]["extra_data"], {"extra": "data"})

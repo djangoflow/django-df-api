@@ -1,8 +1,9 @@
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions
+from rest_framework.exceptions import APIException
 from rest_framework.settings import api_settings
 from rest_framework.views import exception_handler
 
@@ -172,3 +173,36 @@ def errors_formatter_exception_handler(exc: Exception, context: dict) -> Any:
     response.data = formatter()
 
     return response
+
+
+class ExtraDataAPIException(APIException):
+    """
+    We can use this exception to pass extra data to the frontend.
+    ErrorsFormatter will include the extra data in the response.
+    So response will look like this:
+    {
+        "errors": [
+            {
+                "message": "Error message",
+                "code": "Some code",
+                "field": "field_name",
+                "extra_data": {
+                    "some_key": "some_value"
+                }
+            },
+            ...
+        ]
+    }
+    """
+
+    def __init__(
+        self, detail: Any = None, code: Any = None, extra_data: Any = None
+    ) -> None:
+        self.extra_data = extra_data
+        super().__init__(detail, code)
+
+    def get_full_details(self) -> Dict[str, Any]:
+        return {
+            **super().get_full_details(),
+            "extra_data": self.extra_data,
+        }
