@@ -11,6 +11,8 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from .settings import api_settings
+
 app_name = "df_api_drf"
 
 urlpatterns = []
@@ -21,10 +23,11 @@ for app in apps.get_app_configs():
     if df_meta := getattr(app, "DFMeta", None):
         if api_path := df_meta.api_path:
             for namespace, urls in getattr(
-                df_meta, "api_drf_namespaces", {"v1": f"{app.name}.drf.urls"}
+                df_meta,
+                "api_drf_namespaces",
+                {api_settings.DEFAULT_NAMESPACE: f"{app.name}.drf.urls"},
             ).items():
                 namespaces[namespace][api_path] = urls
-
 
 for namespace, app_urls in namespaces.items():
     namespace_patterns = [
