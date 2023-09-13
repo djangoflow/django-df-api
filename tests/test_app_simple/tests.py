@@ -1,6 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APIClient, APITestCase
+
+from tests.test_app_simple.models import Note, Post
+
+User = get_user_model()
 
 
 class DfApiTests(APITestCase):
@@ -49,3 +54,68 @@ class DfApiTests(APITestCase):
         url = reverse("df_api_drf:v1:test_app_simple:extra-data-error")
         response = self.client.get(url)
         self.assertEqual(response.data["errors"][0]["extra_data"], {"extra": "data"})
+
+
+class PostApiTests(APITestCase):
+    def setUp(self) -> None:
+        self.author = User.objects.create_user(username="author")
+        self.user = User.objects.create_user(username="user")
+        self.author_client = APIClient()
+        self.author_client.force_authenticate(user=self.author)
+        self.user_client = APIClient()
+        self.user_client.force_authenticate(user=self.user)
+
+        self.post = Post.objects.create(
+            title="title",
+            body="body",
+            author=self.author,
+        )
+
+    def test_author_can_update_post(self) -> None:
+        response = self.author_client.patch(
+            f"/api/v1/test_app_simple/posts/{self.post.id}/", {"title": "new title"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["title"], "new title")
+
+    def test_user_can_read_post(self) -> None:
+        response = self.user_client.get(
+            f"/api/v1/test_app_simple/posts/{self.post.id}/",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["title"], "title")
+
+    def test_user_cannot_update_post(self) -> None:
+        response = self.user_client.patch(
+            f"/api/v1/test_app_simple/posts/{self.post.id}/", {"title": "new title"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class NoteApiTests(APITestCase):
+    def setUp(self) -> None:
+        self.author = User.objects.create_user(username="author")
+        self.user = User.objects.create_user(username="user")
+        self.author_client = APIClient()
+        self.author_client.force_authenticate(user=self.author)
+        self.user_client = APIClient()
+        self.user_client.force_authenticate(user=self.user)
+
+        self.note = Note.objects.create(
+            title="title",
+            body="body",
+            author=self.author,
+        )
+
+    def test_author_can_update_note(self) -> None:
+        response = self.author_client.patch(
+            f"/api/v1/test_app_simple/notes/{self.note.id}/", {"title": "new title"}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["title"], "new title")
+
+    def test_user_cannot_read_note(self) -> None:
+        response = self.user_client.get(
+            f"/api/v1/test_app_simple/notes/{self.note.id}/",
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
