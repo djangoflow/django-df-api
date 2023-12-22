@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
+from df_api_drf.resolvers import site_url
 from tests.test_app_simple.models import Note, Post
 
 User = get_user_model()
@@ -119,3 +121,17 @@ class NoteApiTests(APITestCase):
             f"/api/v1/test_app_simple/notes/{self.note.id}/",
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class BaseURLTests(APITestCase):
+    def test_base_url(self) -> None:
+        domain_name = "test.com"
+        Site.objects.update_or_create(
+            id=1,
+            defaults={
+                "domain": domain_name,
+                "name": domain_name,
+            },
+        )
+
+        assert site_url() == "https://test.com/#"
