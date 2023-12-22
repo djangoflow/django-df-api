@@ -134,4 +134,4 @@ class BaseURLTests(APITestCase):
             },
         )
 
-        assert site_url() == "https://test.com/#"
+        assert site_url() == "https://app.test.com/#"

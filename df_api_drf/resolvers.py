@@ -16,7 +16,10 @@ class SiteUrlResolver:
 
     def format_url(self, **kwargs: Any) -> str:
         site = self.get_site(**kwargs)
-        url = f"https://{site.domain}"
+        domain = site.domain
+        if api_settings.SITE_URL_SUBDOMAIN:
+            domain = f"{api_settings.SITE_URL_SUBDOMAIN}.{domain}"
+        url = f"https://{domain}"
         if api_settings.SITE_URL_APPEND_HASH:
             url += "/#"
         return url
