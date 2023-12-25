@@ -6,8 +6,7 @@ from rest_framework.settings import APISettings
 DEFAULTS: Dict[str, Any] = {
     "DEFAULT_NAMESPACE": "v1",
     "SITE_URL_RESOLVER": "df_api_drf.resolvers.SiteUrlResolver",
-    "SITE_URL_APPEND_HASH": True,
-    "SITE_URL_SUBDOMAIN": "app",
+    "SITE_URL": "https://app.%s/#",
 }
 
 api_settings = APISettings(getattr(settings, "DF_API_DRF", None), DEFAULTS)

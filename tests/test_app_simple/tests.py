@@ -4,7 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from df_api_drf.resolvers import site_url
+from df_api_drf.resolvers import client_url
 from tests.test_app_simple.models import Note, Post
 
 User = get_user_model()
@@ -134,4 +134,4 @@ class BaseURLTests(APITestCase):
             },
         )
 
-        assert site_url() == "https://app.test.com/#"
+        assert client_url() == "https://app.test.com/#"
